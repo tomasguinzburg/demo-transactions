@@ -15,12 +15,18 @@ public class Router {
     ResponseTransformer transformer;
     TransactionsEndpoint transactionsEndpoint;
     ValidationExceptionHandler validationExceptionHandler;
+    NullPointerExceptionHandler nullPointerExceptionHandler;
 
     @Inject
-    Router(ResponseTransformer transformer, TransactionsEndpoint transactionsEndpoint, ValidationExceptionHandler validationExceptionHandler) {
+    Router( ResponseTransformer transformer
+          , TransactionsEndpoint transactionsEndpoint
+          , ValidationExceptionHandler validationExceptionHandler
+          , NullPointerExceptionHandler nullPointerExceptionHandler
+          ) {
         this.transformer = transformer;
         this.transactionsEndpoint = transactionsEndpoint;
         this.validationExceptionHandler = validationExceptionHandler;
+        this.nullPointerExceptionHandler = nullPointerExceptionHandler;
     }
 
     public void registerRoutes(){
@@ -31,6 +37,7 @@ public class Router {
         get("/transactions/:id", "application/json", transactionsEndpoint::getTransaction, transformer);
         after((req, res) -> res.type("application/json"));
         exception(ValidationException.class, validationExceptionHandler);
+        exception(NullPointerException.class, nullPointerExceptionHandler);
     }
 
 }

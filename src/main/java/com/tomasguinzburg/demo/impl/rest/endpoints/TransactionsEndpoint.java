@@ -23,17 +23,7 @@ public class TransactionsEndpoint {
     }
 
     public Long createTransaction(Request request, Response response) throws ValidationException {
-        JsonObject requestDTO = gson.fromJson(request.body(), JsonObject.class);
-        //TODO improve serializer to allow missing nullable fields
-        Transaction transaction = Transaction.builder()
-                                             .accountIban(requestDTO.get("account_iban").getAsString())
-                                             .amount(requestDTO.get("amount").getAsBigDecimal())
-                                             .date(requestDTO.get("date").getAsString())
-                                             .description(requestDTO.get("description").getAsString())
-                                             .fee(requestDTO.get("fee").getAsBigDecimal())
-                                             .reference(requestDTO.get("reference").getAsString())
-                                             .build();
-
+        Transaction transaction = gson.fromJson(request.body(), Transaction.class);
         return transactionsService.create(transaction);
     }
 

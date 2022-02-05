@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class Account {
-    private final Long ownerUserID;
+    private final long ownerUserID;
     private final String iban;
     private final BigDecimal balance;
     private final String label;

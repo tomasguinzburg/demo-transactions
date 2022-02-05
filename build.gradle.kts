@@ -10,6 +10,7 @@ plugins {
     java
     idea
     application
+    jacoco
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.freefair.lombok") version "6.3.0"
 
@@ -35,6 +36,7 @@ dependencies {
     testAnnotationProcessor("com.google.dagger:dagger-compiler:2.40.5")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.22")
     testCompileOnly("org.projectlombok:lombok:1.18.22")
+    testImplementation("org.mockito:mockito-core:3.+")
     testImplementation("com.google.dagger:dagger:2.40.5")
     testImplementation("com.sparkjava:spark-core:2.9.3")
     testImplementation("org.slf4j:slf4j-simple:1.7.35")
@@ -51,4 +53,63 @@ java {
 
 application() {
     mainClass.set("com.tomasguinzburg.demo.impl.application.App")
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+    }
+}
+
+tasks.test {
+    useJUnit()
+    maxHeapSize = "1G"
+    finalizedBy(tasks.jacocoTestCoverageVerification) // report is always generated after tests run
+}
+
+//Set code coverage threshold to 70%, but exclude all auto-generated sources, router mappings and dependency injection configuration
+tasks.withType<JacocoCoverageVerification> {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.7".toBigDecimal()
+            }
+        }
+
+        rule {
+            isEnabled = false
+            element = "CLASS"
+            includes = listOf("org.gradle.*")
+
+            limit {
+                counter = "LINE"
+                value = "TOTALCOUNT"
+                maximum = "0.7".toBigDecimal()
+            }
+        }
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.map {
+            fileTree(it).apply {
+                exclude("com/generate/**", "com/tomasguinzburg/demo/impl/rest/Router.class", "com/tomasguinzburg/demo/impl/application/**")
+            }
+        }))
+    }
+}
+
+tasks.withType<JacocoReport> {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.map {
+            fileTree(it).apply {
+                exclude("com/generate/**", "com/tomasguinzburg/demo/impl/rest/Router.class", "com/tomasguinzburg/demo/impl/application/**")
+            }
+        }))
+    }
 }

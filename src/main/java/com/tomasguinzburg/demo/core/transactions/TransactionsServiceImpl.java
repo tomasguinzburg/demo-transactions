@@ -49,11 +49,11 @@ public class TransactionsServiceImpl implements TransactionsService {
                                        .filter(t -> t.getAccountIban().equals(query.getAccountIban()))
                                        .collect(Collectors.toList());
         }
-        if (query.getSorting().equals("ascending")) {
+        if (StringUtils.isNotBlank(query.getSorting()) && query.getSorting().equals("ascending")) {
             transactions = transactions.stream()
                                        .sorted(Comparator.comparing(Transaction::getAmount))
                                        .collect(Collectors.toList());
-        } else if (query.getSorting().equals("descending")) {
+        } else if (StringUtils.isNotBlank(query.getSorting()) && query.getSorting().equals("descending")) {
             transactions = transactions.stream()
                                        .sorted(Comparator.comparing(Transaction::getAmount).reversed())
                                        .collect(Collectors.toList());
@@ -67,21 +67,8 @@ public class TransactionsServiceImpl implements TransactionsService {
                        ? BigDecimal.ZERO
                        : transaction.getFee();
 
-        // To be very rigorous, we should check that the substracted fee does not change
-        // the operation sign. But in the spec we are told that, by definition,
-        // a transaction is a debit or a credit according to the sign of the amount field.
-        // I will go for exactly what the test says; but it could lead to problems when, for example
-        // amount = 3 fee = 3.18 gives us a credit that's actually deducting 18 cents from the account.
-        Boolean debit = transaction.getAmount().compareTo(BigDecimal.ZERO) < 0;
-        Boolean credit = transaction.getAmount().compareTo(BigDecimal.ZERO) > 0;
-
-
         // Both add to balance, as debits are already negatively values.
-        if (debit) {
-            accountsService.addToBalance(transaction.getAccountIban(), transaction.getAmount().subtract(transaction.getFee()));
-        } else if (credit) {
-            accountsService.addToBalance(transaction.getAccountIban(), transaction.getAmount().subtract(transaction.getFee()));
-        }
+        accountsService.addToBalance(transaction.getAccountIban(), transaction.getAmount().subtract(fee));
 
     }
 
@@ -105,6 +92,7 @@ public class TransactionsServiceImpl implements TransactionsService {
         return transaction;
     }
 
+    //We could create a validator class if this keeps growing...
     /**
      * Applies all validation required
      * @param transaction the transaction to validate
@@ -123,9 +111,12 @@ public class TransactionsServiceImpl implements TransactionsService {
      * @implNote BigDecimal arithmetic is a pain, read carefully
      */
     private void validateTransactionFunds(Transaction transaction) throws ValidationException {
-        if (accountsService.get(transaction.getAccountIban()).getBalance()
+        if (transaction.getFee() != null && accountsService.get(transaction.getAccountIban()).getBalance()
                 .subtract(transaction.getAmount().negate()
                                 .subtract(transaction.getFee())).compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValidationException("VAL001", "Insufficient funds");
+        }
+        else if (accountsService.get(transaction.getAccountIban()).getBalance().add(transaction.getAmount()).compareTo(BigDecimal.ZERO) < 0) {
             throw new ValidationException("VAL001", "Insufficient funds");
         }
     }

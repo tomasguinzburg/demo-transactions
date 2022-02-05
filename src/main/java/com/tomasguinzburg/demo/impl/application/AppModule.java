@@ -11,6 +11,7 @@ import com.tomasguinzburg.demo.core.transactions.TransactionsServiceImpl;
 import com.tomasguinzburg.demo.impl.repository.InMemoryAccountsRepositoryImpl;
 import com.tomasguinzburg.demo.impl.repository.InMemoryTransactionsRepositoryImpl;
 import com.tomasguinzburg.demo.impl.rest.GsonTransformer;
+import com.tomasguinzburg.demo.impl.rest.NullPointerExceptionHandler;
 import com.tomasguinzburg.demo.impl.rest.ValidationExceptionHandler;
 import dagger.Module;
 import dagger.Provides;
@@ -31,6 +32,10 @@ public class AppModule {
     @Provides
     public ValidationExceptionHandler provideValidationExceptionHandler(){
         return new ValidationExceptionHandler(ValidationException.class);
+    }
+    @Provides
+    public NullPointerExceptionHandler provideBNullPointerExceptionHandler(){
+        return new NullPointerExceptionHandler(NullPointerException.class);
     }
     //Services
     @Provides

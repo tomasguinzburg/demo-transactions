@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class Transaction {
-
     private final String reference;
     private final @NonNull String accountIban;
     private final String date;

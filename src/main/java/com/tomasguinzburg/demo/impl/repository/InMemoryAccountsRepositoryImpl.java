@@ -26,6 +26,10 @@ public class InMemoryAccountsRepositoryImpl implements AccountsRepository {
         this.populate();
     }
 
+    //FIXME in a real application this method should not exist and accounts created via due process.
+    //      I didn't bother opening and endpoint for this, but it should be pretty quick to do if required.
+    //      Also in a real application this repository implementation would probably be an HTTPClient connecting
+    //      to a different microservice, named demo-accounts.
     private void populate(){
         Account account1 = Account.builder()
                                   .ownerUserID(1L)
