@@ -9,9 +9,14 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ develop ]
+    branches: 
+      - develop
+      - 'feature/**'
+      - 'release/**'
   pull_request:
-    branches: [ develop ]
+    branches:
+      - develop
+      - master
 
 jobs:
   build:
@@ -28,5 +33,11 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@937999e9cc2425eddc7fd62d1053baf041147db7
       with:
-        arguments: test jacocoTestCoverageVerification
+        arguments: build
+    - name: Test with Gradle
+      with:
+        arguments: test
+    - name: Code coverage
+      with:
+        arguments: jacocoCoverageVerification
         
