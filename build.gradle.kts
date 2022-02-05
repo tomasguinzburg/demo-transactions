@@ -31,7 +31,7 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.35")
     implementation("junit:junit:4.13.2")
     implementation("com.google.code.gson:gson:2.8.9")
-    implementation("com.google.guava:guava:31.0.1-jre")                     //Gradle dependency
+    implementation("com.google.guava:guava:31.0.1-jre")                     //For more collectors
     testAnnotationProcessor("com.google.dagger:dagger-compiler:2.40.5")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.22")
     testCompileOnly("org.projectlombok:lombok:1.18.22")
@@ -50,5 +50,5 @@ java {
 }
 
 application() {
-    mainClass.set("com.tomasguinzburg.demo.transactions.App")
+    mainClass.set("com.tomasguinzburg.demo.impl.application.App")
 }
