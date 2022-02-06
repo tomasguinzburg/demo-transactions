@@ -1,13 +1,12 @@
 package com.tomasguinzburg.demo.test.core.transactions;
 
-import com.tomasguinzburg.demo.core.accounts.Account;
-import com.tomasguinzburg.demo.core.accounts.AccountsService;
+import com.tomasguinzburg.demo.core.accounts.impl.AccountServiceImpl;
+import com.tomasguinzburg.demo.core.accounts.models.Account;
 import com.tomasguinzburg.demo.core.exceptions.ValidationException;
-import com.tomasguinzburg.demo.core.repository.TransactionsRepository;
-import com.tomasguinzburg.demo.core.transactions.Transaction;
-import com.tomasguinzburg.demo.core.transactions.TransactionQuery;
-import com.tomasguinzburg.demo.core.transactions.TransactionsService;
-import com.tomasguinzburg.demo.core.transactions.TransactionsServiceImpl;
+import com.tomasguinzburg.demo.core.repositories.TransactionRepository;
+import com.tomasguinzburg.demo.core.transactions.impl.TransactionServiceImpl;
+import com.tomasguinzburg.demo.core.transactions.models.Transaction;
+import com.tomasguinzburg.demo.core.transactions.models.TransactionQuery;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,9 +18,9 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class TestTransactionsServiceImpl {
+public class TestTransactionServiceImpl {
 
-    private TransactionsService transactionsService;
+    private TransactionServiceImpl transactionServiceImpl;
 
     private static final String ACCOUNT_IBAN = "ES9820385778983000760237";
     private static final String DATE = "2019-07-16T16:55:42.000Z";
@@ -69,7 +68,7 @@ public class TestTransactionsServiceImpl {
     @Before
     public void setUp() throws ValidationException {
 
-        TransactionsRepository mockRepository = mock(TransactionsRepository.class);
+        TransactionRepository mockRepository = mock(TransactionRepository.class);
         when(mockRepository.get(1L)).thenReturn(mockTransaction);
         when(mockRepository.get(2L)).thenReturn(mockTransaction2);
 
@@ -78,24 +77,24 @@ public class TestTransactionsServiceImpl {
 
         when(mockRepository.save(any(Transaction.class))).thenReturn(4L);
         when(mockRepository.save(success)).thenReturn(3L);
-        AccountsService mockAccountService = mock(AccountsService.class);
+        AccountServiceImpl mockAccountService = mock(AccountServiceImpl.class);
         when(mockAccountService.get(ACCOUNT_IBAN)).thenReturn(mockAccount);
         when(mockAccountService.get(BAD_IBAN)).thenThrow(new ValidationException("VAL002", "There are no accounts with this IBAN"));
         when(mockAccountService.get(DUPLICATE_IBAN)).thenThrow(new ValidationException("VAL003", "There are multiple accounts with the same IBAN. Call your bank"));
 
-        transactionsService = new TransactionsServiceImpl(mockRepository, mockAccountService);
+        transactionServiceImpl = new TransactionServiceImpl(mockRepository, mockAccountService, mockAccountService);
     }
 
     @Test
     public void testGet(){
-        Transaction result = transactionsService.get(1L);
+        Transaction result = transactionServiceImpl.get(1L);
         assertEquals(ACCOUNT_IBAN, result.getAccountIban());
         assertEquals( new BigDecimal(AMOUNT), result.getAmount());
     }
 
     @Test
     public void testGetAll() {
-        List<Transaction> result = transactionsService.getAll();
+        List<Transaction> result = transactionServiceImpl.getAll();
         assertEquals(2, result.size());
         assertEquals( new BigDecimal(AMOUNT), result.get(0).getAmount());
         assertEquals(new BigDecimal(AMOUNT_2), result.get(1).getAmount());
@@ -103,16 +102,13 @@ public class TestTransactionsServiceImpl {
 
     @Test
     public void testGetByQuery() {
-        TransactionQuery query = new TransactionQuery();
-        TransactionQuery badQuery = new TransactionQuery();
-        query.setAccountIban(ACCOUNT_IBAN);
-        query.setSorting("ascending");
-        badQuery.setAccountIban("1234123");
+        TransactionQuery query = TransactionQuery.builder().accountIban(ACCOUNT_IBAN).sorting("ascending").build();
+        TransactionQuery badQuery = TransactionQuery.builder().accountIban("1234123").build();
 
-        List<Transaction> result = transactionsService.getByQuery(query);
-        List<Transaction> badResult = transactionsService.getByQuery(badQuery);
+        List<Transaction> result = transactionServiceImpl.getByQuery(query);
+        List<Transaction> badResult = transactionServiceImpl.getByQuery(badQuery);
         query.setSorting("descending");
-        List<Transaction> anotherGoodResult = transactionsService.getByQuery(query);
+        List<Transaction> anotherGoodResult = transactionServiceImpl.getByQuery(query);
 
         assertEquals(new BigDecimal(AMOUNT_2), result.get(0).getAmount());
         assertEquals(0, badResult.size());
@@ -123,7 +119,7 @@ public class TestTransactionsServiceImpl {
     public void testCreateTransactionSuccess() {
 
         try {
-            long ID = transactionsService.create(success);
+            long ID = transactionServiceImpl.create(success);
             assertEquals(EXPECTED_ID, ID);
         } catch (ValidationException e) {
             fail();
@@ -140,7 +136,7 @@ public class TestTransactionsServiceImpl {
                                           .reference("123123123123")
                                           .build();
         try {
-            long ID = transactionsService.create(emptyFee);
+            long ID = transactionServiceImpl.create(emptyFee);
             assertEquals(4L, ID);
         } catch (Exception e) {
             fail();
@@ -159,12 +155,49 @@ public class TestTransactionsServiceImpl {
                                                         .reference("")
                                                         .build();
         try {
-            long ID = transactionsService.create(successCreateReference);
+            long ID = transactionServiceImpl.create(successCreateReference);
             assertEquals(4L, ID);
-        } catch(ValidationException e) {
+        } catch (ValidationException e) {
             fail();
         }
     }
+
+    @Test
+    public void testCreateTransactionAsignDateSuccess() {
+
+        Transaction successCreateReference = Transaction.builder()
+                .amount(new BigDecimal(AMOUNT_3))
+                .accountIban(ACCOUNT_IBAN)
+                .description("This one works")
+                .fee(BigDecimal.valueOf(-3.45))
+                .reference("")
+                .build();
+        try {
+            long ID = transactionServiceImpl.create(successCreateReference);
+            assertEquals(4L, ID);
+        } catch (ValidationException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testCreateTransactionFailByDateFormat() {
+        Transaction failByDateFormat = Transaction.builder()
+                                                  .amount(BigDecimal.valueOf(AMOUNT_3))
+                                                  .accountIban(ACCOUNT_IBAN)
+                                                  .reference("!@#41251235245")
+                                                  .description("This one fails")
+                                                  .date("WHAT'SADATEBRO")
+                                                  .fee(BigDecimal.valueOf(3.18))
+                                                  .build();
+        try {
+            transactionServiceImpl.create(failByDateFormat);
+            fail();
+        } catch (ValidationException e) {
+            assertEquals("VAL007", e.getCode());
+        }
+    }
+
 
     @Test
     public void testCreateTransactionFailByFunds() {
@@ -176,7 +209,7 @@ public class TestTransactionsServiceImpl {
                                              .reference("123123123123")
                                              .build();
         try {
-            transactionsService.create(failByFunds);
+            transactionServiceImpl.create(failByFunds);
             fail();
         } catch (ValidationException e) {
             assertEquals("VAL001", e.code);     //Insufficient funds
@@ -194,7 +227,7 @@ public class TestTransactionsServiceImpl {
                 .reference("123123123123")
                 .build();
         try {
-            transactionsService.create(failByFunds);
+            transactionServiceImpl.create(failByFunds);
             fail();
         } catch (ValidationException e) {
             assertEquals("VAL001", e.code);     //Insufficient funds
@@ -212,7 +245,7 @@ public class TestTransactionsServiceImpl {
                 .reference("123123123123")
                 .build();
         try {
-            transactionsService.create(failByInexistentIBAN);
+            transactionServiceImpl.create(failByInexistentIBAN);
             fail();
         } catch (ValidationException e) {
             assertEquals("VAL002", e.code);     //Inexistent IBAN
@@ -230,7 +263,7 @@ public class TestTransactionsServiceImpl {
                 .reference("123123123123")
                 .build();
         try {
-            transactionsService.create(failByDuplicateIBAN);
+            transactionServiceImpl.create(failByDuplicateIBAN);
             fail();
         } catch (ValidationException e) {
             assertEquals("VAL003", e.code);     //Duplicate IBAN
@@ -248,7 +281,7 @@ public class TestTransactionsServiceImpl {
                                                  .reference("f768aed6-25ca-4af1-bf78-bef3e26e3689")
                                                  .build();
         try {
-            transactionsService.create(failByReference);
+            transactionServiceImpl.create(failByReference);
             fail();
         } catch (ValidationException e) {
             assertEquals("VAL004", e.code);     //Reference in use
@@ -266,7 +299,7 @@ public class TestTransactionsServiceImpl {
                                                   .reference("123123123123")
                                                   .build();
         try {
-            transactionsService.create(failByAmountZero);
+            transactionServiceImpl.create(failByAmountZero);
             fail();
         } catch (ValidationException e) {
             assertEquals("VAL005", e.code);     //Invalid amount

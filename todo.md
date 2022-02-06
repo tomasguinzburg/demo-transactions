@@ -1,3 +1,0 @@
-- Validate input fields, i.e. sending a non existing id throws exception.
-- IDs shouldn't be continuous in a transactions application
-- Add tests for all business code and maybe some satelattiles

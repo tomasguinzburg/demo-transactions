@@ -1,4 +1,4 @@
-package com.tomasguinzburg.demo.core.transactions;
+package com.tomasguinzburg.demo.core.transactions.models;
 
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +15,5 @@ public class Transaction {
     private final @NonNull BigDecimal amount;
     private final BigDecimal fee;
     private final String description;
+
 }

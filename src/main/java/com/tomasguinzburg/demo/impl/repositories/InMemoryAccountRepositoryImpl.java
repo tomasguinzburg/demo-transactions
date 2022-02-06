@@ -1,12 +1,13 @@
-package com.tomasguinzburg.demo.impl.repository;
+package com.tomasguinzburg.demo.impl.repositories;
 
 import com.google.common.collect.MoreCollectors;
-import com.tomasguinzburg.demo.core.accounts.Account;
+import com.tomasguinzburg.demo.core.accounts.models.Account;
 import com.tomasguinzburg.demo.core.exceptions.ValidationException;
-import com.tomasguinzburg.demo.core.repository.AccountsRepository;
-import com.tomasguinzburg.demo.impl.repository.entities.AccountEntity;
+import com.tomasguinzburg.demo.core.repositories.AccountRepository;
+import com.tomasguinzburg.demo.impl.repositories.entities.AccountEntity;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class InMemoryAccountsRepositoryImpl implements AccountsRepository {
+@Singleton
+public class InMemoryAccountRepositoryImpl implements AccountRepository {
     private final AtomicLong idSequence;
     private final Map<Long, AccountEntity> memoryStorage;
 
     @Inject
-    public InMemoryAccountsRepositoryImpl(Integer capacity) {
+    public InMemoryAccountRepositoryImpl(Integer capacity) {
         idSequence = new AtomicLong(0);
         memoryStorage = new ConcurrentHashMap<>(capacity);
         this.populate();

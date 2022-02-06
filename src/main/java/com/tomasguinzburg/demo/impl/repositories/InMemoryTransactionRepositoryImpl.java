@@ -1,25 +1,27 @@
-package com.tomasguinzburg.demo.impl.repository;
+package com.tomasguinzburg.demo.impl.repositories;
 
-import com.tomasguinzburg.demo.core.transactions.Transaction;
-import com.tomasguinzburg.demo.core.repository.TransactionsRepository;
-import com.tomasguinzburg.demo.impl.repository.entities.TransactionEntity;
+import com.google.common.collect.MoreCollectors;
+import com.tomasguinzburg.demo.core.transactions.models.Transaction;
+import com.tomasguinzburg.demo.core.repositories.TransactionRepository;
+import com.tomasguinzburg.demo.impl.repositories.entities.TransactionEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Singleton
-public class InMemoryTransactionsRepositoryImpl implements TransactionsRepository {
+public class InMemoryTransactionRepositoryImpl implements TransactionRepository {
 
     private final AtomicLong idSequence;
     private final Map<Long, TransactionEntity> memoryStorage;
 
     @Inject
-    public InMemoryTransactionsRepositoryImpl(Integer capacity) {
+    public InMemoryTransactionRepositoryImpl(Integer capacity) {
         idSequence = new AtomicLong(0);
         memoryStorage = new ConcurrentHashMap<>(capacity);
     }
@@ -68,5 +70,10 @@ public class InMemoryTransactionsRepositoryImpl implements TransactionsRepositor
                           .date(entity.getDate())
                           .description(entity.getDescription())
                           .build();
+    }
+
+    @Override
+    public Transaction get(String reference) throws NoSuchElementException{
+            return this.getAll().stream().filter(t -> t.getReference().equals(reference)).collect(MoreCollectors.onlyElement());
     }
 }

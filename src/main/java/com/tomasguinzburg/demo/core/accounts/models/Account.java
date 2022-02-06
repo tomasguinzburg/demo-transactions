@@ -1,4 +1,4 @@
-package com.tomasguinzburg.demo.core.accounts;
+package com.tomasguinzburg.demo.core.accounts.models;
 
 import lombok.Builder;
 import lombok.Data;

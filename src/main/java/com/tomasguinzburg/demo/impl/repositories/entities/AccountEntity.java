@@ -1,9 +1,7 @@
-package com.tomasguinzburg.demo.impl.repository.entities;
+package com.tomasguinzburg.demo.impl.repositories.entities;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 

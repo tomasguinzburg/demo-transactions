@@ -1,8 +1,8 @@
 package com.tomasguinzburg.demo.test.impl.repository;
 
-import com.tomasguinzburg.demo.core.accounts.Account;
+import com.tomasguinzburg.demo.core.accounts.models.Account;
 import com.tomasguinzburg.demo.core.exceptions.ValidationException;
-import com.tomasguinzburg.demo.impl.repository.InMemoryAccountsRepositoryImpl;
+import com.tomasguinzburg.demo.impl.repositories.InMemoryAccountRepositoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,14 +10,14 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
-public class TestInMemoryAccountsRepositoryImpl {
+public class TestInMemoryAccountRepositoryImpl {
 
-    private InMemoryAccountsRepositoryImpl inMemoryAccountsRepository;
+    private InMemoryAccountRepositoryImpl inMemoryAccountsRepository;
     private static final String EXISTING_IBAN = "ES9820385778983000760236";
 
     @Before
     public void setUp() {
-        inMemoryAccountsRepository = new InMemoryAccountsRepositoryImpl(100);
+        inMemoryAccountsRepository = new InMemoryAccountRepositoryImpl(100);
     }
 
     @Test

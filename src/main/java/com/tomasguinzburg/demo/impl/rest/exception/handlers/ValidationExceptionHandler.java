@@ -1,4 +1,4 @@
-package com.tomasguinzburg.demo.impl.rest;
+package com.tomasguinzburg.demo.impl.rest.exception.handlers;
 
 import com.tomasguinzburg.demo.core.exceptions.ValidationException;
 import spark.ExceptionHandlerImpl;
