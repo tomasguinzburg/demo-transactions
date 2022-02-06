@@ -1,4 +1,4 @@
-package com.tomasguinzburg.demo.transactions;
+package com.tomasguinzburg.demo.impl.rest;
 
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
