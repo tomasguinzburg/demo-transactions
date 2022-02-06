@@ -1,5 +1,6 @@
-package com.tomasguinzburg.demo.transactions;
+package com.tomasguinzburg.demo.impl.application;
 
+import com.tomasguinzburg.demo.impl.rest.Router;
 import dagger.Component;
 
 import javax.inject.Singleton;
