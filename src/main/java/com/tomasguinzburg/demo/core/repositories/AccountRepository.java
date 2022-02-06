@@ -1,12 +1,12 @@
-package com.tomasguinzburg.demo.core.repository;
+package com.tomasguinzburg.demo.core.repositories;
 
-import com.tomasguinzburg.demo.core.accounts.Account;
+import com.tomasguinzburg.demo.core.accounts.models.Account;
 import com.tomasguinzburg.demo.core.exceptions.ValidationException;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface AccountsRepository {
+public interface AccountRepository {
     /**
      * Gets the account by ID
      *

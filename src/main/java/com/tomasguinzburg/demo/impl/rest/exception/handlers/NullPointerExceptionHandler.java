@@ -1,4 +1,4 @@
-package com.tomasguinzburg.demo.impl.rest;
+package com.tomasguinzburg.demo.impl.rest.exception.handlers;
 
 import spark.ExceptionHandlerImpl;
 import spark.Request;

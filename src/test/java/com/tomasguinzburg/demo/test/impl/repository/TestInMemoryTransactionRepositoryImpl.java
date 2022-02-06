@@ -1,21 +1,21 @@
 package com.tomasguinzburg.demo.test.impl.repository;
 
-import com.tomasguinzburg.demo.core.transactions.Transaction;
-import com.tomasguinzburg.demo.impl.repository.InMemoryTransactionsRepositoryImpl;
+import com.tomasguinzburg.demo.core.transactions.models.Transaction;
+import com.tomasguinzburg.demo.impl.repositories.InMemoryTransactionRepositoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 
-public class TestInMemoryTransactionsRepositoryImpl {
+public class TestInMemoryTransactionRepositoryImpl {
 
-    private InMemoryTransactionsRepositoryImpl inMemoryTransactionsRepository;
+    private InMemoryTransactionRepositoryImpl inMemoryTransactionsRepository;
     private static final String EXISTING_IBAN = "ES9820385778983000760236";
 
     @Before
     public void setUp() {
-        inMemoryTransactionsRepository = new InMemoryTransactionsRepositoryImpl(100);
+        inMemoryTransactionsRepository = new InMemoryTransactionRepositoryImpl(100);
     }
 
     @Test

@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "8d28a80c-cc7a-4c18-afb0-bfaafccbbb54",
+		"name": "demo-transactions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "transaction-status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reference\": \"6e26810f-4204-459b-a8aa-2a0b2bd4d60a\",\n    \"channel\": \"CLIENT\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:4567/transactions/status",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "4567",
+					"path": [
+						"transactions",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-transaction",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reference\":\"\",\n    \"account_iban\":\"ES9820385778983000760237\",\n    \"date\":\"2019-07-16T16:55:42.000Z\",\n    \"amount\":123.38,\n    \"fee\":1.18,\n    \"description\":\"Restaurant payment\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:4567/transactions",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "4567",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "query-transactions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:4567/transactions?account_iban=ES9820385778983000760236&sorting=descending",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "4567",
+					"path": [
+						"transactions"
+					],
+					"query": [
+						{
+							"key": "account_iban",
+							"value": "ES9820385778983000760236"
+						},
+						{
+							"key": "sorting",
+							"value": "descending"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-by-internal-id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:4567/transactions/1",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "4567",
+					"path": [
+						"transactions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

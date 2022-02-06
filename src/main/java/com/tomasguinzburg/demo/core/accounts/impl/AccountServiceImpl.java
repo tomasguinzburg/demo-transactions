@@ -1,41 +1,37 @@
 package com.tomasguinzburg.demo.core.accounts.impl;
 
-import com.tomasguinzburg.demo.core.accounts.Account;
-import com.tomasguinzburg.demo.core.accounts.AccountsService;
+import com.tomasguinzburg.demo.core.accounts.AccountBalanceAdderByIBAN;
+import com.tomasguinzburg.demo.core.accounts.AccountSupplier;
+import com.tomasguinzburg.demo.core.accounts.AccountSupplierByIBAN;
+import com.tomasguinzburg.demo.core.accounts.models.Account;
+import com.tomasguinzburg.demo.core.accounts.AccountListSupplier;
 import com.tomasguinzburg.demo.core.exceptions.ValidationException;
-import com.tomasguinzburg.demo.core.repository.AccountsRepository;
+import com.tomasguinzburg.demo.core.repositories.AccountRepository;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class AccountsServiceImpl implements AccountsService {
+@Singleton
+public class AccountServiceImpl implements AccountBalanceAdderByIBAN
+                                          , AccountSupplier
+                                          , AccountSupplierByIBAN
+                                          , AccountListSupplier {
 
-    AccountsRepository repository;
+    AccountRepository repository;
 
     @Inject
-    public AccountsServiceImpl(AccountsRepository repository) {
+    public AccountServiceImpl(AccountRepository repository) {
         this.repository = repository;
-    }
-
-    @Override
-    public void addToBalance(Long ID, BigDecimal amount) throws ValidationException {
-        Account account = repository.get(ID);
-        if (account.getBalance().add(amount).compareTo(BigDecimal.ZERO) < 0) {
-            throw new ValidationException("VAL001", "Insufficient funds.");
-        }
-        //TODO log this, someone's money is changing
-        repository.updateBalance(ID, account.getBalance().add(amount));
     }
 
     @Override
     public void addToBalance(String iban, BigDecimal amount) throws ValidationException {
         Account account = repository.get(iban);
         if (account.getBalance().add(amount).compareTo(BigDecimal.ZERO) < 0) {
-            //TODO log this, someone's money is changing
             throw new ValidationException("VAL001", "Insufficient funds.");
         }
-        //TODO log this, someone's money is changing
         repository.updateBalance(iban, account.getBalance().add(amount));
     }
 

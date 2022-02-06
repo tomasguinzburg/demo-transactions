@@ -1,4 +1,4 @@
-package com.tomasguinzburg.demo.impl.repository.entities;
+package com.tomasguinzburg.demo.impl.repositories.entities;
 
 
 import lombok.Getter;
