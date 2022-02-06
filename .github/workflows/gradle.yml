@@ -31,12 +31,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-    - name: Clean gradle
-      run:  ./gradlew clean -no-daemon
-    - name: Build gradle
+    - name: Build, test and coverage
       run:  ./gradlew build -no-daemon
-    - name: Test
-      run: ./gradlew test -no-daemon
-    - name: Coverage
-      run: ./gradlew jacocoTestCoverageVerification -no-daemon
         
