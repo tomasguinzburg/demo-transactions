@@ -11,6 +11,7 @@ plugins {
     idea
     application
     jacoco
+//    id("com.heroku.sdk.heroku-gradle") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.freefair.lombok") version "6.3.0"
 
@@ -73,6 +74,13 @@ tasks.test {
     finalizedBy(tasks.jacocoTestCoverageVerification) // report is always generated after tests run
 }
 
+//heroku {
+//    appName = "guinzburg-demo-transactions"
+//    includes = mutableListOf("build/libs/demo-transactions-all.jar")
+//    setIncludeBuildDir(false)
+//    jdkVersion = "11"
+//}
+
 //Set code coverage threshold to 70%, but exclude all auto-generated sources, router mappings and dependency injection configuration
 tasks.withType<JacocoCoverageVerification> {
     violationRules {
@@ -112,4 +120,9 @@ tasks.withType<JacocoReport> {
             }
         }))
     }
+}
+
+tasks.register("stage"){
+    dependsOn(tasks.installShadowDist)
+    finalizedBy(tasks.run)
 }
