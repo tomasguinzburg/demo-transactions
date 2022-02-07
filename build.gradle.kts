@@ -54,6 +54,7 @@ java {
 
 application() {
     mainClass.set("com.tomasguinzburg.demo.impl.application.App")
+    applicationDefaultJvmArgs = mutableListOf("-XX:+UseContainerSupport")
 }
 
 jacoco {
