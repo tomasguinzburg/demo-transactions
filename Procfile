@@ -1,1 +1,1 @@
-web:    java -jar build/libs/demo-transactions-all.jar $PORT
+web:    ./build/install/demo-transactions-shadow/bin/demo-transactions

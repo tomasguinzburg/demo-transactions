@@ -20,6 +20,7 @@ public class Router {
     StateEndpoint stateEndpoint;
     ValidationExceptionHandler validationExceptionHandler;
     NullPointerExceptionHandler nullPointerExceptionHandler;
+    Integer port;
 
     @Inject
     Router( ResponseTransformer transformer
@@ -33,9 +34,18 @@ public class Router {
         this.stateEndpoint = stateEndpoint;
         this.validationExceptionHandler = validationExceptionHandler;
         this.nullPointerExceptionHandler = nullPointerExceptionHandler;
+        ProcessBuilder process = new ProcessBuilder();
+       if (process.environment().get("PORT") != null) {
+            port = Integer.parseInt(process.environment().get("PORT"));
+        } else {
+            port = 4567;
+        }
     }
 
+
+
     public void registerRoutes(){
+        port(port);
         get("/ping", (req, res) -> "pong");
 
         post("/transactions", "application/json", transactionsEndpoint::createTransaction, transformer);
