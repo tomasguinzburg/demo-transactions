@@ -42,7 +42,7 @@ public class InMemoryTransactionRepositoryImpl implements TransactionRepository 
         return ID;
     }
 
-    //TODO: it's definitely better to just build or import an object mapper, but meanwhile we just use lambdas
+    //it's definitely better to just build or import an object mapper, but meanwhile we just use lambdas
     @Override
     public List<Transaction> getAll() {
         return memoryStorage.entrySet()

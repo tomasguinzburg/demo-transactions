@@ -1,6 +1,8 @@
 package com.tomasguinzburg.demo.impl.application;
 
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.tomasguinzburg.demo.core.accounts.AccountBalanceAdderByIBAN;
 import com.tomasguinzburg.demo.core.accounts.AccountSupplierByIBAN;
 import com.tomasguinzburg.demo.core.accounts.impl.AccountServiceImpl;
@@ -9,13 +11,11 @@ import com.tomasguinzburg.demo.core.repositories.AccountRepository;
 import com.tomasguinzburg.demo.core.repositories.TransactionRepository;
 import com.tomasguinzburg.demo.core.state.StateSupplier;
 import com.tomasguinzburg.demo.core.state.impl.StateServiceImpl;
-import com.tomasguinzburg.demo.core.state.models.State;
 import com.tomasguinzburg.demo.core.transactions.TransactionCreator;
 import com.tomasguinzburg.demo.core.transactions.TransactionFilteredListSupplier;
 import com.tomasguinzburg.demo.core.transactions.TransactionListSupplier;
 import com.tomasguinzburg.demo.core.transactions.TransactionSupplier;
 import com.tomasguinzburg.demo.core.transactions.impl.TransactionServiceImpl;
-import com.tomasguinzburg.demo.core.transactions.models.Transaction;
 import com.tomasguinzburg.demo.impl.repositories.InMemoryAccountRepositoryImpl;
 import com.tomasguinzburg.demo.impl.repositories.InMemoryTransactionRepositoryImpl;
 import com.tomasguinzburg.demo.impl.rest.GsonTransformer;
@@ -25,7 +25,6 @@ import dagger.Module;
 import dagger.Provides;
 import spark.ResponseTransformer;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Module
