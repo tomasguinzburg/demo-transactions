@@ -1,1 +1,1 @@
-web:    ./build/install/demo-transactions-shadow/bin/demo-transactions
+web:    ./build/install/demo-transactions/bin/demo-transactions

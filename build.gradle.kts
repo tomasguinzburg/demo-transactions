@@ -123,5 +123,5 @@ tasks.withType<JacocoReport> {
 }
 
 tasks.register("stage"){
-    dependsOn(tasks.clean, tasks.installShadowDist)
+    dependsOn(tasks.clean, tasks.installDist)
 }
