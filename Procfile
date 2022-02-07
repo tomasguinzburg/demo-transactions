@@ -1,0 +1,1 @@
+web:    ./build/install/demo-transactions/bin/demo-transactions

@@ -11,6 +11,7 @@ plugins {
     idea
     application
     jacoco
+//    id("com.heroku.sdk.heroku-gradle") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.freefair.lombok") version "6.3.0"
 
@@ -36,7 +37,7 @@ dependencies {
     testAnnotationProcessor("com.google.dagger:dagger-compiler:2.40.5")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.22")
     testCompileOnly("org.projectlombok:lombok:1.18.22")
-    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("org.mockito:mockito-core:4.3.1")
     testImplementation("com.google.dagger:dagger:2.40.5")
     testImplementation("com.sparkjava:spark-core:2.9.3")
     testImplementation("org.slf4j:slf4j-simple:1.7.35")
@@ -53,6 +54,7 @@ java {
 
 application() {
     mainClass.set("com.tomasguinzburg.demo.impl.application.App")
+    applicationDefaultJvmArgs = mutableListOf("-XX:+UseContainerSupport")
 }
 
 jacoco {
@@ -72,6 +74,13 @@ tasks.test {
     maxHeapSize = "1G"
     finalizedBy(tasks.jacocoTestCoverageVerification) // report is always generated after tests run
 }
+
+//heroku {
+//    appName = "guinzburg-demo-transactions"
+//    includes = mutableListOf("build/libs/demo-transactions-all.jar")
+//    setIncludeBuildDir(false)
+//    jdkVersion = "11"
+//}
 
 //Set code coverage threshold to 70%, but exclude all auto-generated sources, router mappings and dependency injection configuration
 tasks.withType<JacocoCoverageVerification> {
@@ -112,4 +121,8 @@ tasks.withType<JacocoReport> {
             }
         }))
     }
+}
+
+tasks.register("stage"){
+    dependsOn(tasks.clean, tasks.installDist)
 }
