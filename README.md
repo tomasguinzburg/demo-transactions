@@ -43,7 +43,7 @@ To fix this, just send a credit with a very big amount to each of them. It may b
 ## Architecture
 The service architecture is loosely influenced by Clean Architecture by Robert C. Martin, and several microservices I have worked on
 from authors who follow his design advices. It is in no way a rigorous application of his philosophy, but focuses on some core concepts:
-- Business code is implementation agnostic. The only dependencies of use-case implementations (ServiceImpl) are the repositories APIs.
+- Business code is implementation agnostic. The only dependencies of use-case implementations (ServiceImpl) are the repository APIs.
 - Tools know about business code, business code knows nothing about tools and frameworks. A usecase is the same regardless of it being called from HTTP or the CLI,
 and a repository is just a place that stores entities, whether it is a DB, message queue or an HTTPClient to another kind of implementation (an in-memory mock, in this case)
 - Complex functions should be separated in several simpler, chained functions
