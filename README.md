@@ -57,8 +57,8 @@ The advantage of this architecture is that you can literally copy the core packa
 you just switched frameworks. I may showcase this by switching to spring-boot and an H2 database in another branch, but probably not before the deadline's due.
 
 ## Tools
-For this size of an application, I find it better to work with a small, well-chosen toolkit rather than a big framework. This makes the service pretty small light too,
-and prevents some coding smells that come from automatically defaulting to the same framework without assesing the real needs of the project. I do use a few tools though:
+For this size of an application, I find it better to work with a small, well-chosen toolkit rather than a big framework. This makes the service pretty light too, with the fatJar weighting only 6MB even though it contains all librarys.
+It also prevents some code smells that come from automatically defaulting to the same framework without assesing the real needs of the project. I do use a few tools though:
 
 - [Gradle](https://gradle.org/) for dependency management and task-control. I chose it over maven because it makes it a lot easier to configure CI runners in Github. The con is that is not so well known and the Kotlin DSL can have a steep learning curve.
 - [Dagger2](https://dagger.dev/) for dependency injection. Pros: All the injection is done through code generation, so literally 0 runtime and startup overhead. Cons: Not very well known in the backend environment, although Android Developers might know it too well. I like that it's lightweight and only has dependency injection functionalities, nothing else. 
