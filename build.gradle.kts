@@ -37,7 +37,7 @@ dependencies {
     testAnnotationProcessor("com.google.dagger:dagger-compiler:2.40.5")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.22")
     testCompileOnly("org.projectlombok:lombok:1.18.22")
-    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("org.mockito:mockito-core:4.3.1")
     testImplementation("com.google.dagger:dagger:2.40.5")
     testImplementation("com.sparkjava:spark-core:2.9.3")
     testImplementation("org.slf4j:slf4j-simple:1.7.35")

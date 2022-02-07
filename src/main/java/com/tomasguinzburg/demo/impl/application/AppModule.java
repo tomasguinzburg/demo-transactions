@@ -83,12 +83,12 @@ public class AppModule {
     //Repositories
     @Provides @Singleton
     TransactionRepository provideTransactionsRepository() {
-        int CAPACITY = 100000000;
+        int CAPACITY = 1000;
         return new InMemoryTransactionRepositoryImpl(CAPACITY);
     }
     @Provides @Singleton
     AccountRepository provideAccountsRepository(){
-        int CAPACITY = 10000;
+        int CAPACITY = 100;
         return new InMemoryAccountRepositoryImpl(CAPACITY);
     }
 }
