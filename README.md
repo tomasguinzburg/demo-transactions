@@ -54,7 +54,7 @@ contains all the business specific code; while the [impl](https://github.com/tom
 contains the necessary tools and implementations for this application to run as a stand alone microservice.
 
 The advantage of this architecture is that you can literally copy the core package, paste it in some other application, write the missing repository implementations and endpoints and voila,
-you just switched frameworks. I may showcase this by switching to spring-boot and an H2 database n another branch, but probably not before the deadline's due.
+you just switched frameworks. I may showcase this by switching to spring-boot and an H2 database in another branch, but probably not before the deadline's due.
 
 ## Tools
 For this size of an application, I find it better to work with a small, well-chosen toolkit rather than a big framework. This makes the service pretty small light too,
